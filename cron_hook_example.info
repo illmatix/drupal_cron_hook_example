@@ -1,0 +1,5 @@
+name = Drupal Cron Hook Example
+description = Runs some date checking logic on cron
+core = 7.x
+package = examples
+version = 7.x-1.0

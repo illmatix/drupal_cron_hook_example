@@ -1,0 +1,30 @@
+<?php
+
+/**
+ * Implements hook_cron().
+ */
+function cron_hook_example_cron() {
+  // Basic SQL query to obtain nids for your content type and limit results to published nodes that have the date field set to the future.
+  $query = <<<SQL
+  SELECT n.nid FROM {node} as n
+  LEFT JOIN {field_data_field_YOURDATEFIELD} as df ON df.entity_id = n.nid
+  WHERE n.type in ('YOURCONTENTTYPE')
+    AND n.status = 1
+    AND df.field_data_field_YOURDATEFIELD_value >= :nowdate
+SQL;
+
+  // Make the query with string replacements
+  $nids = db_query($query, array(':nowdate' => strtotime('now')));
+
+  // Check to see if any results have been returned.
+  if(empty($nids) == FALSE) {
+    // Load the nodes
+    $nodes = node_load_multiple(array_keys($nids));
+
+    foreach($nodes as $node) {
+      // do your node manipulation here.
+    }
+
+  }
+
+}
